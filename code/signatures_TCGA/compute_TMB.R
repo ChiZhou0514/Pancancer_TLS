@@ -25,6 +25,8 @@ create_directory("TMB")
 cox_os <- NULL
 cox_pfi <- NULL
 
+
+
 for (i in 1:length(names(TCGA_pheno))){
     pheno <- TCGA_pheno[[names(TCGA_pheno)[i]]]
     TMB_data <- TCGA_TMB[[names(TCGA_pheno)[i]]]

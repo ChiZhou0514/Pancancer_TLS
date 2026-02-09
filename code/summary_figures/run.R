@@ -1,11 +1,11 @@
-### setwd("your work dictionary")
+setwd("/home/zhouchi/Project/")
 ### Draw box plots for five testing sets
-source("./TLS_project/code/summary_figures/boxplot.R")
+#source("./TLS_project/code/summary_figures/boxplot.R")
 ### Draw correlation heatmap of twelve signatures
-source("./TLS_project/code/summary_figures/corrplot.R")
+#source("./TLS_project/code/summary_figures/corrplot.R")
 ### Draw heatmap of twelve signatures in the ICB dataset
-source("./TLS_project/code/summary_figures/heatmap_ICB.R")
+#source("./TLS_project/code/summary_figures/heatmap_ICB.R")
 ### Draw heatmap of twelve signatures in the TCGA dataset
 source("./TLS_project/code/summary_figures/heatmap_TCGA.R")
 ### Draw heatmap of twelve signatures of a single cancer species in the ICB dataset
-source("./TLS_project/code/summary_figures/heatmap_ICB_per_tumor.R")
+#source("./TLS_project/code/summary_figures/heatmap_ICB_per_tumor.R")

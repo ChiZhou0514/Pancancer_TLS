@@ -1,5 +1,5 @@
 ### setwd("your work dictionary")
-setwd("/home/zhouchi/")
+setwd("/home/zhouchi/Project")
 ### Calculate GSVA scores of six gene signatures， and the asscociation with os and pri
 #source("./TLS_project/code/signatures_TCGA/compute_gs_signatures.R")
 ### Calculate immune infiltration degree， and the asscociation with os and pfi
