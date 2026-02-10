@@ -7,11 +7,11 @@ suppressMessages(library(gridExtra))
 suppressMessages(library(tidyverse))
 suppressMessages(library(plotROC))
 
-load("./TLS_project/data/ICB_expr_uni.Rdata")
-load("./TLS_project/data/ICB_pheno_uni.Rdata")
+load("./TLS_project/data/ICB_expr_multivariate.Rdata")
+load("./TLS_project/data/ICB_pheno_multivariate.Rdata")
 
 create_directory <- function(signature){
-    dir <- paste0("./TLS_project/results/signatures_ICB_uni/", signature)
+    dir <- paste0("./TLS_project/results/signatures_ICB_multivariate/", signature)
     if (file.exists(dir)){unlink(dir, recursive = TRUE)}
     dir.create(dir, recursive = TRUE)
     dir.create(paste0(dir, "/KMPlot"))
@@ -150,7 +150,7 @@ for (signatureID in c("IPS", "IPRES_score", "IFN_score", "COX_IS")){
             pheno[which(pheno$sample_id==sample), "score"] <- as.numeric(data_4_score[which(data_4_score$SAMPLE==sample), signatureID])
         }
         pheno <- pheno[which(!is.na(pheno$score)),]
-        save(pheno, file = paste0("./TLS_project/results/signatures_ICB_uni/", signatureID, "/Pheno/", names(ICB_expr)[i], ".Rdata"))
+        save(pheno, file = paste0("./TLS_project/results/signatures_ICB_multivariate/", signatureID, "/Pheno/", names(ICB_expr)[i], ".Rdata"))
         
         d = as.data.frame( cbind( pheno$response , pheno$score ) )
         colnames(d) = c( "response" , "sig" )
@@ -161,7 +161,7 @@ for (signatureID in c("IPS", "IPRES_score", "IFN_score", "COX_IS")){
         auc <- c(auc, as.numeric(calc_auc(basicplot)$AUC))
 
 
-        OS_KMplot_dir <- paste0("./TLS_project/results/signatures_ICB_uni/", signatureID, "/KMPlot/OS/", names(ICB_pheno)[i], ".pdf")
+        OS_KMplot_dir <- paste0("./TLS_project/results/signatures_ICB_multivariate/", signatureID, "/KMPlot/OS/", names(ICB_pheno)[i], ".pdf")
         Get_KMplot(cancer_type = names(ICB_pheno)[i], 
                     status = as.numeric(pheno$status), 
                     time = as.numeric(pheno$os), 
@@ -169,13 +169,13 @@ for (signatureID in c("IPS", "IPRES_score", "IFN_score", "COX_IS")){
                     data = pheno, 
                     dir = OS_KMplot_dir)
 
-        cox_os <- rbind(cox_os, Get_HR_continous_ICB_uni(status = as.numeric(pheno$status), 
+        cox_os <- rbind(cox_os, Get_HR_continous_ICB_multivariate(status = as.numeric(pheno$status), 
                                         time = as.numeric(pheno$os), 
                                         score = as.numeric(pheno$score), age = as.numeric(pheno$age),sex= pheno$sex,
                                         data = pheno))
         print(cox_os)
         #cox_os <- rbind(cox_os, Get_HR_continous(status = pheno$os.status, time = pheno$os, score = pheno$score, data = pheno))
-        log_response <- rbind(log_response, Get_coef_continous_uni(score = pheno$score, response = pheno$response,age = as.numeric(pheno$age),sex= pheno$sex))
+        log_response <- rbind(log_response, Get_coef_continous_multivariate(score = pheno$score, response = pheno$response,age = as.numeric(pheno$age),sex= pheno$sex))
         
     }
     cox_os <- cbind(names(ICB_pheno), cox_os) %>% as.data.frame
@@ -184,9 +184,9 @@ for (signatureID in c("IPS", "IPRES_score", "IFN_score", "COX_IS")){
     colnames(cox_os) <- c("study", "HR", "SE", "95di_low", "95di_high", "Pval")
     colnames(log_response) <- c("study", "coef", "SE", "95di_low", "95di_high", "Pval")
     colnames(auc) <- c("study", "AUC")
-    save(cox_os, file = paste0("./TLS_project/results/signatures_ICB_uni/", signatureID, "/COX_OS.Rdata"))
-    save(log_response, file = paste0("./TLS_project/results/signatures_ICB_uni/", signatureID, "/Log_Response.Rdata"))
-    save(auc, file = paste0("./TLS_project/results/signatures_ICB_uni/", signatureID, "/AUC.Rdata"))
+    save(cox_os, file = paste0("./TLS_project/results/signatures_ICB_multivariate/", signatureID, "/COX_OS.Rdata"))
+    save(log_response, file = paste0("./TLS_project/results/signatures_ICB_multivariate/", signatureID, "/Log_Response.Rdata"))
+    save(auc, file = paste0("./TLS_project/results/signatures_ICB_multivariate/", signatureID, "/AUC.Rdata"))
     
 
 }

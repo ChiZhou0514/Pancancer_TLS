@@ -6,7 +6,7 @@ This repository contains the code for TCGA and ICB cohorts' transcriptome data a
 Core Languages:  
 R (≥ 3.6.0) with Bioconductor packages  
 
-Key R Packages:
+Key R Packages:  
 library(tidyverse)      # Data wrangling and visualization  
 library(data.table)     # Efficient data handling  
 library(GSVA)           # Gene set variation analysis  

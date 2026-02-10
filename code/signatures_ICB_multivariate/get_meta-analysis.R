@@ -3,10 +3,10 @@ suppressMessages(library(tidyverse))
 
 source("./TLS_project/code/meta_analysis/meta-analysis.R")
 
-signature_list <- list.files("./TLS_project/results/signatures_ICB_uni/")
+signature_list <- list.files("./TLS_project/results/signatures_ICB_multivariate/")
 
 for (signatureID in signature_list){
-    prefix <- paste0("./TLS_project/results/signatures_ICB_uni/", signatureID, "/")
+    prefix <- paste0("./TLS_project/results/signatures_ICB_multivariate/", signatureID, "/")
     cox_os_Rdata <- paste0(prefix, "COX_OS.Rdata")
     log_RData <- paste0(prefix, "Log_Response.Rdata")
     load(cox_os_Rdata)

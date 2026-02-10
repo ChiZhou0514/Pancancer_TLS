@@ -5,7 +5,7 @@ suppressMessages(library(tidyverse))
 suppressMessages(library(plotROC))
 
 create_directory <- function(signature){
-    dir <- paste0("./TLS_project/results/signatures_ICB_uni/", signature)
+    dir <- paste0("./TLS_project/results/signatures_ICB_multivariate/", signature)
     if (file.exists(dir)){unlink(dir, recursive = TRUE)}
     dir.create(dir, recursive = TRUE)
     dir.create(paste0(dir, "/KMPlot"))
@@ -19,8 +19,8 @@ create_directory <- function(signature){
 source("./TLS_project/code/summary_figures/Get_KMplot.R")
 source("./TLS_project/code/meta_analysis/Get_Association.R")
 
-load("./TLS_project/data/ICB_expr_uni.Rdata")
-load("./TLS_project/data/ICB_pheno_uni.Rdata")
+load("./TLS_project/data/ICB_expr_multivariate.Rdata")
+load("./TLS_project/data/ICB_pheno_multivariate.Rdata")
 load("./TLS_project/data/gene_signatures.Rdata")
 
 for (i in 1:length(names(gene_signatures))){
@@ -47,7 +47,7 @@ for (i in 1:length(names(gene_signatures))){
         
         pheno <- pheno[which(!is.na(pheno$score)),]
         
-        save(pheno, file = paste0("./TLS_project/results/signatures_ICB_uni/", names(gene_signatures)[i], "/Pheno/", names(ICB_expr)[j], ".Rdata"))
+        save(pheno, file = paste0("./TLS_project/results/signatures_ICB_multivariate/", names(gene_signatures)[i], "/Pheno/", names(ICB_expr)[j], ".Rdata"))
         
         d = as.data.frame( cbind( pheno$response , pheno$score ) )
         colnames(d) = c( "response" , "sig" )
@@ -58,19 +58,19 @@ for (i in 1:length(names(gene_signatures))){
         auc <- c(auc, as.numeric(calc_auc(basicplot)$AUC))
         
         ############There are issues with the OS of these two datasets
-        OS_KMplot_dir <- paste0("./TLS_project/results/signatures_ICB_uni/", names(gene_signatures)[i], "/KMPlot/OS/", names(ICB_expr)[j], ".pdf")
+        OS_KMplot_dir <- paste0("./TLS_project/results/signatures_ICB_multivariate/", names(gene_signatures)[i], "/KMPlot/OS/", names(ICB_expr)[j], ".pdf")
         Get_KMplot(cancer_type = names(ICB_expr)[j], 
                     status = as.numeric(pheno$status), 
                     time = as.numeric(pheno$os), 
                     score = as.numeric(pheno$score), 
                     data = pheno, 
                     dir = OS_KMplot_dir)
-        cox_os <- rbind(cox_os, Get_HR_continous_ICB_uni(status = as.numeric(pheno$status), 
+        cox_os <- rbind(cox_os, Get_HR_continous_ICB_multivariate(status = as.numeric(pheno$status), 
                                     time = as.numeric(pheno$os), 
                                     score = as.numeric(pheno$score), age = as.numeric(pheno$age),sex= pheno$sex,
                                     data = pheno))
 
-        log_response <- rbind(log_response, Get_coef_continous_uni(score = pheno$score, response = pheno$response,age = as.numeric(pheno$age),sex= pheno$sex))
+        log_response <- rbind(log_response, Get_coef_continous_multivariate(score = pheno$score, response = pheno$response,age = as.numeric(pheno$age),sex= pheno$sex))
 
     }
     cox_os <- cbind(names(ICB_expr), cox_os) %>% as.data.frame
@@ -79,7 +79,7 @@ for (i in 1:length(names(gene_signatures))){
     colnames(cox_os) <- c("study", "HR", "SE", "95di_low", "95di_high", "Pval")
     colnames(log_response) <- c("study", "coef", "SE", "95di_low", "95di_high", "Pval")
     colnames(auc) <- c("study", "AUC")
-    save(cox_os, file = paste0("./TLS_project/results/signatures_ICB_uni/", names(gene_signatures)[i], "/COX_OS.Rdata"))
-    save(log_response, file = paste0("./TLS_project/results/signatures_ICB_uni/", names(gene_signatures)[i], "/Log_Response.Rdata"))
-    save(auc, file = paste0("./TLS_project/results/signatures_ICB_uni/", names(gene_signatures)[i], "/AUC.Rdata"))
+    save(cox_os, file = paste0("./TLS_project/results/signatures_ICB_multivariate/", names(gene_signatures)[i], "/COX_OS.Rdata"))
+    save(log_response, file = paste0("./TLS_project/results/signatures_ICB_multivariate/", names(gene_signatures)[i], "/Log_Response.Rdata"))
+    save(auc, file = paste0("./TLS_project/results/signatures_ICB_multivariate/", names(gene_signatures)[i], "/AUC.Rdata"))
 }

@@ -6,11 +6,11 @@ suppressMessages(library(grid))
 suppressMessages(library(gridExtra))
 suppressMessages(library(tidyverse))
 
-load("./TLS_project/data/TCGA_expr_uni.Rdata")
-load("./TLS_project/data/TCGA_pheno_uni.Rdata")
+load("./TLS_project/data/TCGA_expr_multivariate.Rdata")
+load("./TLS_project/data/TCGA_pheno_multivariate.Rdata")
 
 create_directory <- function(signature){
-    dir <- paste0("./TLS_project/results/signatures_TCGA_uni/", signature)
+    dir <- paste0("./TLS_project/results/signatures_TCGA_multivariate/", signature)
     if (file.exists(dir)){unlink(dir, recursive = TRUE)}
     dir.create(dir, recursive = TRUE)
     dir.create(paste0(dir, "/KMPlot"))
@@ -146,23 +146,23 @@ for (signatureID in c("IPS", "IPRES_score", "IFN_score", "COX_IS")){
         }
         pheno <- pheno[which(!is.na(pheno$score)),]
         
-        OS_KMplot_dir <- paste0("./TLS_project/results/signatures_TCGA_uni/", signatureID, "/KMPlot/OS/", names(TCGA_pheno)[i], ".pdf")
-        PFI_KMplot_dir <- paste0("./TLS_project/results/signatures_TCGA_uni/", signatureID, "/KMPlot/PFI/", names(TCGA_pheno)[i], ".pdf")
+        OS_KMplot_dir <- paste0("./TLS_project/results/signatures_TCGA_multivariate/", signatureID, "/KMPlot/OS/", names(TCGA_pheno)[i], ".pdf")
+        PFI_KMplot_dir <- paste0("./TLS_project/results/signatures_TCGA_multivariate/", signatureID, "/KMPlot/PFI/", names(TCGA_pheno)[i], ".pdf")
         
         Get_KMplot(cancer_type = names(TCGA_pheno)[i], status = pheno$os.status, time = pheno$os, score = pheno$score, data = pheno, dir = OS_KMplot_dir)
         Get_KMplot(cancer_type = names(TCGA_pheno)[i], status = pheno$pfi.status, time = pheno$pfi, score = pheno$score, data = pheno, dir = PFI_KMplot_dir)
         
         if (length(table(pheno$Sex))>1){
-            cox_os <- rbind(cox_os, Get_HR_continous_uni(status = pheno$os.status, time = pheno$os, score = pheno$score,sex = pheno$Sex,age = pheno$Age,stage = pheno$Stage,data = pheno))
-            cox_pfi <- rbind(cox_pfi, Get_HR_continous_uni(status = pheno$pfi.status, time = pheno$pfi, score = pheno$score,sex = pheno$Sex,age = pheno$Age,stage = pheno$Stage, data = pheno))
+            cox_os <- rbind(cox_os, Get_HR_continous_multivariate(status = pheno$os.status, time = pheno$os, score = pheno$score,sex = pheno$Sex,age = pheno$Age,stage = pheno$Stage,data = pheno))
+            cox_pfi <- rbind(cox_pfi, Get_HR_continous_multivariate(status = pheno$pfi.status, time = pheno$pfi, score = pheno$score,sex = pheno$Sex,age = pheno$Age,stage = pheno$Stage, data = pheno))
         }    
     }
     cox_os <- cbind(names(TCGA_pheno), cox_os)
     cox_pfi <- cbind(names(TCGA_pheno), cox_pfi)
     colnames(cox_os) <- c("study", "HR", "SE", "95di_low", "95di_high", "Pval")
     colnames(cox_pfi) <- c("study", "HR", "SE", "95di_low", "95di_high", "Pval")
-    save(cox_os, file = paste0("./TLS_project/results/signatures_TCGA_uni/", signatureID, "/COX_OS.Rdata"))
-    save(cox_pfi, file = paste0("./TLS_project/results/signatures_TCGA_uni/", signatureID, "/COX_PFI.Rdata"))
+    save(cox_os, file = paste0("./TLS_project/results/signatures_TCGA_multivariate/", signatureID, "/COX_OS.Rdata"))
+    save(cox_pfi, file = paste0("./TLS_project/results/signatures_TCGA_multivariate/", signatureID, "/COX_PFI.Rdata"))
     
 
 }

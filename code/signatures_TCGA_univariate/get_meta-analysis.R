@@ -1,7 +1,7 @@
 
 source("./TLS_project/code/meta_analysis/meta-analysis.R")
 
-signature_list <- list.files("./TLS_project/results/signatures_TCGA_uni/")
+signature_list <- list.files("./TLS_project/results/signatures_TCGA_multivariate/")
 
 hot_tumor=c('BLCA', 'BRCA', 'CESC', 'COAD', 'READ', 'HNSC', 'KIRC', 'LIHC', 'LUAD', 'LUSC', 'MESO', 'OV', 'PAAD', 'PRAD', 'SKCM', 'STAD', 'UCEC','LUNG')
 
@@ -10,7 +10,7 @@ cold_tumor=c('ACC', 'CHOL', 'DLBC', 'ESCA', 'KICH', 'KIRP', 'TGCT', 'THCA', 'THY
 #print(signature_list)
 
 for (signatureID in signature_list){
-    prefix <- paste0("./TLS_project/results/signatures_TCGA_uni/", signatureID, "/")
+    prefix <- paste0("./TLS_project/results/signatures_TCGA_multivariate/", signatureID, "/")
     print(prefix)
     ###OS
     cox_os_Rdata <- paste0(prefix, "COX_OS.Rdata")
